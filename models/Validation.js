@@ -1,7 +1,9 @@
+let validationDone = false
 // Đối tượng Validation
 function Validation(object) {
-  // Chứa function test của từng selector
+  // Object chứa function test
   let functionTest = {}
+
   // Hàm thông báo lỗi lên giao diện
   function validate(inputElement, rule) {
     let errorElement = inputElement
@@ -9,7 +11,8 @@ function Validation(object) {
       .querySelector(object.errorSelector)
     let errorMessage
     let rules = functionTest[rule.selector]
-    // Lặp qua từng function trong mảng để kiểm tra, nếu có lỗi thì dừng và thông báo lên giao diện
+
+    // Gọi ra từng hàm để test trên input đó, nếu có lỗi thì dừng và thông báo lên giao diện
     for (let i = 0; i < rules.length; i++) {
       errorMessage = rules[i](inputElement.value)
       if (errorMessage) break
@@ -21,34 +24,47 @@ function Validation(object) {
       errorElement.style.display = 'none'
       errorElement.innerHTML = ''
     }
+
     // Xóa thông báo lỗi khi người dùng bắt đầu nhập
     inputElement.oninput = function () {
       errorElement.style.display = 'none'
       errorElement.innerHTML = ''
     }
   }
-  // lấy ra form chứa các input
+
+  // lấy ra form cần kiểm tra và button xử lý
   let formElement = document.querySelector(object.form)
-  // Duyệt qua từng phần tử trong rules của object truyền vào Validation
+  let button = document.querySelector(object.button)
+
+  // Gán validate cho sự kiện onclick của button
   if (formElement) {
+    button.addEventListener('click', function () {
+      object.rules.forEach(function (rule) {
+        let inputElement = formElement.querySelector(rule.selector)
+        validate(inputElement, rule)
+
+        // Sau khi onclick lần đầu sẽ gán sự kiện onblur để thông báo lỗi ngay cho người dùng nếu nhập sai sau khi rời khỏi input
+        if (inputElement) {
+          inputElement.onblur = function () {
+            validate(inputElement, rule)
+          }
+        }
+      })
+      validationDone = true
+    })
+
+    // Duyệt mảng lấy ra các function test
     object.rules.forEach(function (rule) {
-      let inputElement = formElement.querySelector(rule.selector)
-      // Lấy ra các function test qua mỗi lân lặp, push vào mảng để kiểm tra
       if (Array.isArray(functionTest[rule.selector])) {
         functionTest[rule.selector].push(rule.test)
       } else {
         functionTest[rule.selector] = [rule.test]
       }
-      if (inputElement) {
-      // Thông báo nếu có lỗi khi người dùng ra khỏi input
-        inputElement.onblur = function () {
-          validate(inputElement, rule)
-        }
-      }
     })
   }
 }
 
+/* ------- ĐỊNH NGHĨA CÁC HÀM KIỂM TRA THÔNG QUA ĐỐI TƯỢNG VALIDATION --------- */
 // Kiểm tra bắt buộc nhập vào
 Validation.isRequired = function (selector) {
   return {
@@ -76,7 +92,9 @@ Validation.isLetter = function (selector) {
     selector: selector,
     test: function (value) {
       regexLetter = /^[A-Z a-z]+$/
-      return regexLetter.test(value) ? '' : `Giá trị nhập vào phải là kí tự`
+      return regexLetter.test(removeAscent(value))
+        ? ''
+        : `Giá trị nhập vào phải là kí tự`
     },
   }
 }
@@ -88,7 +106,7 @@ Validation.isEmail = function (selector) {
     test: function (value) {
       regexEmail =
         /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-      return regexEmail.test(value) ? '' : `Email không hợp lệ`
+      return regexEmail.test(value) ? '' : `Email nhập vào không hợp lệ`
     },
   }
 }
@@ -113,7 +131,7 @@ Validation.isPassword = function (selector) {
       regexPassword = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
       return regexPassword.test(value)
         ? ''
-        : 'Mật khẩu cần ít nhất một kí tự hoa, đặc biệt và số'
+        : `Mật khẩu cần ít nhất một kí tự hoa, số và kí tự đặc biệt`
     },
   }
 }
@@ -147,7 +165,9 @@ Validation.isMinValue = function (selector, minValue) {
   return {
     selector: selector,
     test: function (value) {
-      return value >= minValue ? '' : `Giá trị nhập vào không hợp lệ`
+      return value >= minValue
+        ? ''
+        : `Giá trị nhập vào tối thiểu là ${minValue.toLocaleString()}`
     },
   }
 }
@@ -157,7 +177,22 @@ Validation.isMaxValue = function (selector, maxValue) {
   return {
     selector: selector,
     test: function (value) {
-      return value <= maxValue ? '' : `Giá trị nhập vào không hợp lệ`
+      return value <= maxValue
+        ? ''
+        : `Giá trị nhập vào tối thiểu là ${maxValue.toLocaleString()}`
     },
   }
 }
+
+// Kiểm tra chức vụ
+document.querySelector('#chucvu').onchange = function () {
+  var optionCheck = document.querySelector('#chucvu').value
+  if (optionCheck === 'Chọn Chức Vụ') {
+    document.querySelector('#tbChucVu').innerHTML = 'Vui lòng chọn chức vụ'
+    document.querySelector('#tbChucVu').style.display = 'block'
+  } else {
+    document.querySelector('#tbChucVu').innerHTML = ''
+    document.querySelector('#tbChucVu').style.display = 'none'
+  }
+}
+

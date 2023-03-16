@@ -16,8 +16,10 @@ function Nhanvien() {
       return this.luongCoBan * 3
     } else if (this.chucVu === 'Trưởng Phòng') {
       return this.luongCoBan * 2
-    } else {
+    } else if (this.chucVu === 'Nhân Viên') {
       return this.luongCoBan * 1
+    } else {
+      return 'Vui lòng chọn chức vụ'
     }
   }
   this.xepLoai = function () {
