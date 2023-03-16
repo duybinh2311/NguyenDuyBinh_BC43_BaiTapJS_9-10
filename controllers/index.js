@@ -28,22 +28,22 @@ document.querySelector('#searchName').oninput = function () {
     renderString(listNhanVienSearch)
 }
 
-// Validation({
-//   form: '.modal-body form',
-//   errorSelector: '.sp-thongbao',
-//   rules: [
-//     Validation.isRequired('#tknv'),
-//     Validation.isNumber('#tknv'),
-//     Validation.isMinLength('#tknv', 4),
-//     Validation.isMaxLength('#tknv', 6),
-//     Validation.isRequired('#name'),
-//     Validation.isLetter('#name'),
-//     Validation.isRequired('#email'),
-//     Validation.isEmail('#email'),
-//     Validation.isRequired('#password'),
-//     Validation.isPassword('#password'),
-//     Validation.isRequired('#datepicker'),
-//     Validation.isRequired('#luongCB'),
-//     Validation.isRequired('#gioLam'),
-//   ],
-// })
+Validation({
+  form: '.modal-body form',
+  errorSelector: '.sp-thongbao',
+  rules: [
+    Validation.isRequired('#tknv'),
+    Validation.isNumber('#tknv'),
+    Validation.isMinLength('#tknv', 4),
+    Validation.isMaxLength('#tknv', 6),
+    Validation.isRequired('#name'),
+    Validation.isLetter('#name'),
+    Validation.isRequired('#email'),
+    Validation.isEmail('#email'),
+    Validation.isRequired('#password'),
+    Validation.isPassword('#password'),
+    Validation.isRequired('#datepicker'),
+    Validation.isRequired('#luongCB'),
+    Validation.isRequired('#gioLam'),
+  ],
+})
