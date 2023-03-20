@@ -1,7 +1,7 @@
 // Gán chức năng cho nút thêm nhân viên
 document.querySelector('#btnThemNV').onclick = function () {
   // Tạo đối tượng nhân viên mới
-  let nhanVien = addNhanVien()
+  const nhanVien = addNhanVien()
 
   // Kiểm tra các thông báo lỗi, nếu có sẽ dừng không duyệt thêm nhân viên
   if (nhanVien.chucVu === 'Chọn Chức Vụ') {
@@ -13,7 +13,7 @@ document.querySelector('#btnThemNV').onclick = function () {
     document.querySelector('#tbChucVu').style.display = 'none'
   }
   if (validationDone) {
-    let errorElement = document.querySelectorAll('.sp-thongbao')
+    const errorElement = document.querySelectorAll('.sp-thongbao')
     for (let i = 0; i < errorElement.length; i++) {
       if (errorElement[i].innerHTML !== '') {
         return
@@ -37,9 +37,9 @@ document.querySelector('#btnDong').onclick = function () {
 
 // Gán chức năng tìm kiếm theo xếp loại cho input search
 document.querySelector('#searchName').oninput = function () {
-  let keyword = document.querySelector('#searchName').value
-  let keywordAscent = removeAscent(keyword)
-  let listNhanVienSearch = []
+  const keyword = document.querySelector('#searchName').value
+  const keywordAscent = removeAscent(keyword)
+  const listNhanVienSearch = []
   for (let i = 0; i < listNhanVien.length; i++) {
     if (removeAscent(listNhanVien[i].xepLoai()).search(keywordAscent) !== -1) {
       listNhanVienSearch.push(listNhanVien[i])

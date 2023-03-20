@@ -1,7 +1,7 @@
 /* ------- ĐỊNH NGHĨA CÁC HÀM XỬ LÝ TÍNH NĂNG  --------- */
 // Thêm nhân viên mới
 function addNhanVien() {
-  let newNhanVien = new Nhanvien()
+  const newNhanVien = new Nhanvien()
   return newNhanVien
 }
 
@@ -9,7 +9,7 @@ function addNhanVien() {
 function renderString(listNhanVien) {
   let htmlString = ''
   for (let i = 0; i < listNhanVien.length; i++) {
-    let nhanVien = listNhanVien[i]
+    const nhanVien = listNhanVien[i]
     htmlString += `  <tr>
       <td>${nhanVien.taiKhoan}</td>
       <td>${nhanVien.hoTen}</td>
@@ -56,7 +56,7 @@ function editNhanVien(
   document.querySelector('#btnThemNV').disabled = true
   document.querySelector('#tknv').disabled = true
   document.querySelector('#btnCapNhat').onclick = function () {
-    let nhanVienEdit = new Nhanvien()
+    const nhanVienEdit = new Nhanvien()
     listNhanVien[index].hoTen = nhanVienEdit.hoTen
     listNhanVien[index].email = nhanVienEdit.email
     listNhanVien[index].matKhau = nhanVienEdit.matKhau
